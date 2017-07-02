@@ -1,3 +1,4 @@
+ï»¿
 #include <GL/glut.h>
 #include <vector>
 #include <iostream>
@@ -6,31 +7,31 @@
 #include <algorithm>
 #include <cmath>
 #include <time.h>
-using namespace std;
+	using namespace std;
 
-/*  ÆÁÄ»´óĞ¡  */
+/*  å±å¹•å¤§å°  */
 #define WIDTH 640
 #define HEIGHT 480
 #define PI 3.14159265
 
-// ÏòÁ¿Àà 
+// å‘é‡ç±» 
 struct Vector {
 	float u, v, w;
 	Vector(float _u, float _v, float _w) :u(_u), v(_v), w(_w) {}
 	Vector() :u(0.0), v(0.0), w(0.0) {}
-	float operator*(const Vector &d)  //µã»ı 
+	float operator*(const Vector &d)  //ç‚¹ç§¯ 
 	{
 		return u*d.u + v*d.v + w*d.w;
 	}
-	Vector operator*(float f)	//Êı³Ë
+	Vector operator*(float f)	//æ•°ä¹˜
 	{
 		return Vector(u*f, v*f, w*f);
 	}
-	Vector operator-(const Vector &d)	//ÏòÁ¿¼õ·¨
+	Vector operator-(const Vector &d)	//å‘é‡å‡æ³•
 	{
 		return Vector(u - d.u, v - d.v, w - d.w);
 	}
-	Vector operator+(const Vector &d)	//ÏòÁ¿¼Ó·¨
+	Vector operator+(const Vector &d)	//å‘é‡åŠ æ³•
 	{
 		return Vector(u + d.u, v + d.v, w + d.w);
 	}
@@ -41,11 +42,11 @@ struct Vector {
 		result.w = u*V.v - v*V.u;
 		return result;
 	}
-	float length()  //Ä£³¤ 
+	float length()  //æ¨¡é•¿ 
 	{
 		return sqrt(u*u + v*v + w*w);
 	}
-	void Normalize()  //µ¥Î»»¯ 
+	void Normalize()  //å•ä½åŒ– 
 	{
 		float l = length();
 		u /= l;
@@ -75,7 +76,7 @@ struct Vector4D {
 	float& operator[](int i) {
 		return a[i];
 	}
-	//w¹éÒ»»¯
+	//wå½’ä¸€åŒ–
 	void identity() {
 		if (fabs(a[3]) < 1e-6)
 		{
@@ -89,15 +90,15 @@ struct Vector4D {
 		a[2] /= a[3];
 		return;
 	}
-};	
+};
 
-//¾ØÕóÀà
+//çŸ©é˜µç±»
 struct Matrix {
 	float a[4][4];
 	Matrix() {
 		memset(a, 0, sizeof(a));
 	}
-	//Æ½ÒÆ
+	//å¹³ç§»
 	void ModelT(float x, float y, float z) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = 1;
@@ -108,7 +109,7 @@ struct Matrix {
 		a[1][3] = y;
 		a[2][3] = z;
 	}
-	//Ğı×ª
+	//æ—‹è½¬
 	void ModelRx(float angle_x) {
 		memset(a, 0, sizeof(a));
 		float s = sin(angle_x * PI / 180);
@@ -142,7 +143,7 @@ struct Matrix {
 		a[3][3] = 1;
 		return;
 	}
-	//Ëõ·Å
+	//ç¼©æ”¾
 	void ModelS(float fx, float fy, float fz) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = fx;
@@ -186,7 +187,7 @@ struct Matrix {
 	}
 	Matrix operator*(Matrix b) {
 		Matrix result;
-		for(int i = 0; i < 4; ++i)
+		for (int i = 0; i < 4; ++i)
 			for (int j = 0; j < 4; ++j)
 			{
 				float sum = 0;
@@ -226,8 +227,8 @@ Vector4D operator*(Matrix m, Vector4D v) {
 }
 
 /////////////////////////////////////////
-// BÑùÌõ½¨Ä£
-//	     by ÎÄ¾´¬u
+// Bæ ·æ¡å»ºæ¨¡
+//	     by æ–‡æ•¬ç‘„
 /////////////////////////////////////////
 
 #define X 0
@@ -298,9 +299,9 @@ void Init(void)
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glColor3f(1.0f, 1.0f, 0.0f);
-	// °Ñ×ÅÉ«Ä£Ê½ÉèÖÃÎªµ¥µ÷×ÅÉ«
+	// æŠŠç€è‰²æ¨¡å¼è®¾ç½®ä¸ºå•è°ƒç€è‰²
 	glShadeModel(GL_FLAT); //glShadeModel(GL_SMOOTH);
-						   // °ÑË³Ê±Õë»·ÈÆµÄ¶à±ßĞÎÉèÎªÕıÃæ£¬ÕâÓëÄ¬ÈÏÊÇÏà·´µÄ£¬ÒòÎªÎÒÃÇÊ¹ÓÃµÄÊÇÈı½ÇĞÎÉÈ
+						   // æŠŠé¡ºæ—¶é’ˆç¯ç»•çš„å¤šè¾¹å½¢è®¾ä¸ºæ­£é¢ï¼Œè¿™ä¸é»˜è®¤æ˜¯ç›¸åçš„ï¼Œå› ä¸ºæˆ‘ä»¬ä½¿ç”¨çš„æ˜¯ä¸‰è§’å½¢æ‰‡
 	glFrontFace(GL_CW);
 	glOrtho(-1.0f, 1.0f, -1.0f, 1.0f, -1.0f, 1.0f);
 }
@@ -395,7 +396,7 @@ void DisplayBspine(Vector1 P[], float T[], int n, int k, int count) {
 }
 
 //////////////////////////////////////////
-//	BÑùÌõ½áÊø
+//	Bæ ·æ¡ç»“æŸ
 //////////////////////////////////////////
 Vector pathway[12][1000];
 Vector trace[1000];
@@ -403,17 +404,15 @@ float cameraR;
 int angle;
 
 /*
-// ÇòÀà 
+// çƒç±»
 struct Sphere {
-	float r;
-	Vector o;
-	Color color;
+float r;
+Vector o;
+Color color;
 } s[4];
-
-//¹âÔ´Î»ÖÃ,¿ÉÊÖ¶¯µ÷Õû
+//å…‰æºä½ç½®,å¯æ‰‹åŠ¨è°ƒæ•´
 Vector light(300, 300, 100);
-
-//Ò»Ğ©Ëæ±ãÉèµÄ²ÎÊı 
+//ä¸€äº›éšä¾¿è®¾çš„å‚æ•°
 #define MinWeight 0.0001
 #define Wr 0.3
 #define Wt 0.2
@@ -421,120 +420,113 @@ Vector light(300, 300, 100);
 #define Kt 0.2
 #define Ka 0.3
 #define Kd 0.6
-
 void RayTracing(Vector start, Vector direction, float weight, Color* color) {
-	if (weight < MinWeight)
-	{
-		*color = Color(0, 0, 0);
-	}
-	else
-	{
-		//¼ÆËã¹âÏßÓëËùÓĞÎïÌåµÄ½»µãÖĞÀëstart×î½üµÄµã;
-		float t = 10000.0;
-		int index = -1;
-
-		for (int i = 0; i < 4; ++i)
-		{
-			Vector v = start - s[i].o;
-			float a = direction*v, b = v*v - s[i].r * s[i].r;
-			float delta = a*a - b;
-			if (delta < 0)
-			{
-				continue;
-			}
-			else
-			{
-				float tmpt = -a - sqrt(delta);
-				if (tmpt < 1e-6)
-					continue;
-				if (tmpt < t)
-				{
-					t = tmpt;
-					index = i;
-				}
-			}
-		}
-		if (index == -1)
-			*color = Color(0, 0, 0);
-		else
-		{
-			Vector p = start + direction * t;	//½»µãÎ»ÖÃ
-			Vector ld = p - light;	//¹âÔ´¹âÏßÈëÉä·½Ïò
-			ld.Normalize();
-			Vector N = p - s[index].o;	//·¨Ïß·½Ïò
-			N.Normalize();
-			Vector R = N * (2 * -(direction*N)) + direction;	//·´Éä·½Ïò
-			Vector lr = N * (2 * -(ld*N)) + ld;
-			Vector V = direction * -1;	//ÊÓµã·½Ïò
-
-			int flag = 0;
-			for (int i = 0; i < 4; ++i)
-			{
-				Vector v = p - s[i].o;
-				Vector dir = ld * -1;
-				float a = dir*v, b = v*v - s[i].r * s[i].r;
-				float delta = a*a - b;
-				if (delta < 0)
-				{
-					continue;
-				}
-				else
-				{
-					float tmpt1 = -a + sqrt(delta);
-					float tmpt2 = -a - sqrt(delta);
-					if (tmpt1 > 1e-3 || tmpt2 > 1e-3)
-					{
-						flag = 1;
-						break;
-					}
-				}
-			}
-
-			//ÔÚ½»µã´¦ÓÃ¾Ö²¿¹âÕÕÄ£ĞÍ¼ÆËã³öµÄ¹âÇ¿;
-			float I = 0;
-			if (flag)
-				I = Ka;
-			else
-				I = Ka + Kd * (max((double)-(N*ld), 0.0)) + Ks * (V*lr)*(V*lr)*(V*lr)*(V*lr); //²»ÖªµÀÎªÉ¶¾µÃæ·´ÉäµÄĞ§¹ûºÜÆæ¹ÖËùÒÔÈ¥µôÁË 
-			if (I > 1)	//·ÀÖ¹µş¼ÓµÄ¹âÇ¿¹ı´ó 
-				I = 1;
-			Color Ilocal = s[index].color * I;	//Ô­ÑÕÉ«*¹âÇ¿µÃµ½ÏÔÊ¾ÁÁ¶È 
-
-			Color *Ir = new Color();
-			RayTracing(p, R, weight*Wr, Ir);	//·´Éä
-												//Vector T;
-			Color *It = new Color();
-			//RayTracing(p, T, weight*Wt, It);	//ÕÛÉä£¬ÔİÊ±²»Ëã£¨ÒòÎªÃ»ÓĞÕÛÉäÂÊ¡£¡£¡££© 
-			*color = Ilocal + *Ir * Ks + *It * Kt;
-			delete Ir;	//»ØÊÕÄÚ´æ 
-			delete It;
-		}
-	}
+if (weight < MinWeight)
+{
+*color = Color(0, 0, 0);
 }
-
-
+else
+{
+//è®¡ç®—å…‰çº¿ä¸æ‰€æœ‰ç‰©ä½“çš„äº¤ç‚¹ä¸­ç¦»startæœ€è¿‘çš„ç‚¹;
+float t = 10000.0;
+int index = -1;
+for (int i = 0; i < 4; ++i)
+{
+Vector v = start - s[i].o;
+float a = direction*v, b = v*v - s[i].r * s[i].r;
+float delta = a*a - b;
+if (delta < 0)
+{
+continue;
+}
+else
+{
+float tmpt = -a - sqrt(delta);
+if (tmpt < 1e-6)
+continue;
+if (tmpt < t)
+{
+t = tmpt;
+index = i;
+}
+}
+}
+if (index == -1)
+*color = Color(0, 0, 0);
+else
+{
+Vector p = start + direction * t;	//äº¤ç‚¹ä½ç½®
+Vector ld = p - light;	//å…‰æºå…‰çº¿å…¥å°„æ–¹å‘
+ld.Normalize();
+Vector N = p - s[index].o;	//æ³•çº¿æ–¹å‘
+N.Normalize();
+Vector R = N * (2 * -(direction*N)) + direction;	//åå°„æ–¹å‘
+Vector lr = N * (2 * -(ld*N)) + ld;
+Vector V = direction * -1;	//è§†ç‚¹æ–¹å‘
+int flag = 0;
+for (int i = 0; i < 4; ++i)
+{
+Vector v = p - s[i].o;
+Vector dir = ld * -1;
+float a = dir*v, b = v*v - s[i].r * s[i].r;
+float delta = a*a - b;
+if (delta < 0)
+{
+continue;
+}
+else
+{
+float tmpt1 = -a + sqrt(delta);
+float tmpt2 = -a - sqrt(delta);
+if (tmpt1 > 1e-3 || tmpt2 > 1e-3)
+{
+flag = 1;
+break;
+}
+}
+}
+//åœ¨äº¤ç‚¹å¤„ç”¨å±€éƒ¨å…‰ç…§æ¨¡å‹è®¡ç®—å‡ºçš„å…‰å¼º;
+float I = 0;
+if (flag)
+I = Ka;
+else
+I = Ka + Kd * (max((double)-(N*ld), 0.0)) + Ks * (V*lr)*(V*lr)*(V*lr)*(V*lr); //ä¸çŸ¥é“ä¸ºå•¥é•œé¢åå°„çš„æ•ˆæœå¾ˆå¥‡æ€ªæ‰€ä»¥å»æ‰äº†
+if (I > 1)	//é˜²æ­¢å åŠ çš„å…‰å¼ºè¿‡å¤§
+I = 1;
+Color Ilocal = s[index].color * I;	//åŸé¢œè‰²*å…‰å¼ºå¾—åˆ°æ˜¾ç¤ºäº®åº¦
+Color *Ir = new Color();
+RayTracing(p, R, weight*Wr, Ir);	//åå°„
+//Vector T;
+Color *It = new Color();
+//RayTracing(p, T, weight*Wt, It);	//æŠ˜å°„ï¼Œæš‚æ—¶ä¸ç®—ï¼ˆå› ä¸ºæ²¡æœ‰æŠ˜å°„ç‡ã€‚ã€‚ã€‚ï¼‰
+*color = Ilocal + *Ir * Ks + *It * Kt;
+delete Ir;	//å›æ”¶å†…å­˜
+delete It;
+}
+}
+}
 void myDisplay(void)
 {
-	glBegin(GL_POINTS);
-	for (int i = 0; i < Width; ++i)
-	{
-		for (int j = 0; j < Height; ++j)
-		{
-			Color *c = new Color();
-			RayTracing(Vector(i, j, 1000), Vector(0, 0, -1), 1, c);
-			if (c->r > 255)
-				c->r = 255;
-			if (c->g > 255)
-				c->g = 255;
-			if (c->b > 255)
-				c->b = 255;
-			glColor3ub(c->r, c->g, c->b);
-			glVertex2d(i, j);
-			delete c;
-		}
-	}
-	glEnd();
-	glFlush();
+glBegin(GL_POINTS);
+for (int i = 0; i < Width; ++i)
+{
+for (int j = 0; j < Height; ++j)
+{
+Color *c = new Color();
+RayTracing(Vector(i, j, 1000), Vector(0, 0, -1), 1, c);
+if (c->r > 255)
+c->r = 255;
+if (c->g > 255)
+c->g = 255;
+if (c->b > 255)
+c->b = 255;
+glColor3ub(c->r, c->g, c->b);
+glVertex2d(i, j);
+delete c;
+}
+}
+glEnd();
+glFlush();
 }
 */
 
@@ -543,17 +535,14 @@ Matrix view_transform(Vector camera, Vector x, Vector y, Vector z) {
 #if 0
 	Matrix ModelViewProject, Project, View, Model;
 	Matrix ViewR, ViewT, ModelS, ModelR, ModelT;
-
-	/*Project£ºÍ¶Ó°±ä»»¾ØÕó
-	View£ºÊÓÍ¼±ä»»¾ØÕó
-	Model£ºÄ£ĞÍ±ä»»¾ØÕó*/
+	/*Projectï¼šæŠ•å½±å˜æ¢çŸ©é˜µ
+	Viewï¼šè§†å›¾å˜æ¢çŸ©é˜µ
+	Modelï¼šæ¨¡å‹å˜æ¢çŸ©é˜µ*/
 	ModelViewProject = Project * View * Model;
-
-	/*S£ºËõ·Å R£ºĞı×ª T£ºÆ½ÒÆ*/
+	/*Sï¼šç¼©æ”¾ Rï¼šæ—‹è½¬ Tï¼šå¹³ç§»*/
 	ModelViewProject = Project
 		* ViewR * ViewT
 		* ModelS * ModelR * ModelT;
-
 	Vector4D gl_position = ModelViewProject * Vertex;
 #endif
 
@@ -561,7 +550,7 @@ Matrix view_transform(Vector camera, Vector x, Vector y, Vector z) {
 	viewT.ViewT(camera.u, camera.v, camera.w);
 	Matrix viewR;
 	viewR.ViewR(x, y, z);
-	//cout << "???" << endl << viewT << viewR << "!!!" << endl;		//µ÷ÊÔÊä³ö
+	//cout << "???" << endl << viewT << viewR << "!!!" << endl;		//è°ƒè¯•è¾“å‡º
 	Matrix ViewTransform = viewR * viewT;
 
 	return ViewTransform;
@@ -574,87 +563,107 @@ Matrix project_transform(float z_near, float z_far, int width, int height)
 	return Project;
 }
 
+void Texture() {
+	//è®¾ç½®çº¹ç†
+	GLuint textureId;
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	//è¶…å‡ºçº¹ç†çš„éƒ¨åˆ†
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//çº¿æ€§æ’å€¼æ»¤æ³¢
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//Mipmap
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	//åŠ è½½çº¹ç†
+	GLubyte *imageData = NULL;
+	int picWidth, picHeight;
+	imageData = SOIL_load_image("wood.png",	&picWidth, &picHeight, 0, SOIL_LOAD_RGB); // è¯»å–å›¾ç‰‡æ•°æ®
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,	picWidth, picHeight, 0, GL_RGB,	GL_UNSIGNED_BYTE, imageData); // å®šä¹‰çº¹ç†å›¾åƒ
+}
+
 void myDisplay() {
 	int index = 0;
 	//while (index < 10)
 	//{
-		glClear(GL_COLOR_BUFFER_BIT);
-		Vector4D tmp[12][1000];							//ÓÃÓÚ×ø±ê±ä»»µÄËÄÔª×é
-		for (int i = 0; i < 12; ++i)
-			for (int j = index; j < index + 50; ++j)
-			{
-				tmp[i][j] = Vector4D(pathway[i][j]);
-				//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
-			}
-
-
-		Vector y0 = pathway[0][index] - trace[index];	//·¨Ïò
-		Vector z = trace[index + 1] - trace[index];		//Ïà»ú·½Ïò
-		z.Normalize();
-		y0.Normalize();
-		Vector x0 = y0.cross(z);
-		x0.Normalize();
-		Vector y = x0 * cos(angle*PI / 180) + y0 *sin(angle*PI / 180);
-		Vector camera = y * 8 + trace[index];			//Ïà»úÎ»ÖÃ
-		Vector x = y.cross(z);
-		x.Normalize();
-		y.Normalize();
-		y = y * -1;
-
-		cout << "camera: " << camera.u << ' ' << camera.v << ' ' << camera.w << endl;
-		cout << "x: " << x.u << ' ' << x.v << ' ' << x.w << endl;
-		cout << "y: " << y.u << ' ' << y.v << ' ' << y.w << endl;
-		cout << "z: " << z.u << ' ' << z.v << ' ' << z.w << endl;
-
-		Matrix ViewTransform = view_transform(camera, x, y, z);
-		Matrix ProjectTransform = project_transform(20, 200, WIDTH, HEIGHT);
-
-		cout << ViewTransform << ProjectTransform;
-
-		for (int i = 0; i < 12; ++i)
-			for (int j = index; j < index + 50; ++j)
-			{
-				//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
-				tmp[i][j] = ViewTransform * tmp[i][j];	//Ïà»ú×ø±êÏµ±ä»»Ã»ÎÊÌâ£¡£¡£¡
-				//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
-				tmp[i][j] = ProjectTransform * tmp[i][j];
-				tmp[i][j].identity();
-				//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
-			}
-
-		glColor3b(127, 0, 0);
-		for (int i = 0; i < 12; ++i)
+	glClear(GL_COLOR_BUFFER_BIT);
+	Vector4D tmp[12][1000];							//ç”¨äºåæ ‡å˜æ¢çš„å››å…ƒç»„
+	for (int i = 0; i < 12; ++i)
+		for (int j = index; j < index + 50; ++j)
 		{
-			for (int k = index; k < index + 49; ++k)
-			{
-				int j = (i + 1) % 12;
-#if 0
-				cout << '(' << tmp[i][k].a[0] << ',' << tmp[i][k].a[1] << ')' << ' ';
-				cout << '(' << tmp[i][k + 1].a[0] << ',' << tmp[i][k + 1].a[1] << ')' << ' ';
-				cout << '(' << tmp[j][k + 1].a[0] << ',' << tmp[j][k + 1].a[1] << ')' << ' ';
-				cout << '(' << tmp[j][k].a[0] << ',' << tmp[j][k].a[1] << ')' << ' ';
-				cout << endl << endl;
-#endif
-				//ÎÆÀíÓ³Éä
-				glColor3b(127, 127, 127);
-				glBegin(GL_POLYGON);
-				glVertex2f(tmp[i][k].a[0], tmp[i][k].a[1]);
-				glVertex2f(tmp[i][k + 1].a[0], tmp[i][k + 1].a[1]);
-				glVertex2f(tmp[j][k + 1].a[0], tmp[j][k + 1].a[1]);
-				glVertex2f(tmp[j][k].a[0], tmp[j][k].a[1]);
-				glEnd();
-
-				glColor3b(0, 0, 0);
-				glBegin(GL_LINE_LOOP);
-				glVertex2f(tmp[i][k].a[0], tmp[i][k].a[1]);
-				glVertex2f(tmp[i][k + 1].a[0], tmp[i][k + 1].a[1]);
-				glVertex2f(tmp[j][k + 1].a[0], tmp[j][k + 1].a[1]);
-				glVertex2f(tmp[j][k].a[0], tmp[j][k].a[1]);
-				glEnd();
-			}
-
+			tmp[i][j] = Vector4D(pathway[i][j]);
+			//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
 		}
-		glFlush();
+
+
+	Vector y0 = pathway[0][index] - trace[index];	//æ³•å‘
+	Vector z = trace[index + 1] - trace[index];		//ç›¸æœºæ–¹å‘
+	z.Normalize();
+	y0.Normalize();
+	Vector x0 = y0.cross(z);
+	x0.Normalize();
+	Vector y = x0 * cos(angle*PI / 180) + y0 *sin(angle*PI / 180);
+	Vector camera = y * 8 + trace[index];			//ç›¸æœºä½ç½®
+	Vector x = y.cross(z);
+	x.Normalize();
+	y.Normalize();
+	y = y * -1;
+
+	cout << "camera: " << camera.u << ' ' << camera.v << ' ' << camera.w << endl;
+	cout << "x: " << x.u << ' ' << x.v << ' ' << x.w << endl;
+	cout << "y: " << y.u << ' ' << y.v << ' ' << y.w << endl;
+	cout << "z: " << z.u << ' ' << z.v << ' ' << z.w << endl;
+
+	Matrix ViewTransform = view_transform(camera, x, y, z);
+	Matrix ProjectTransform = project_transform(20, 200, WIDTH, HEIGHT);
+
+	cout << ViewTransform << ProjectTransform;
+
+	for (int i = 0; i < 12; ++i)
+		for (int j = index; j < index + 50; ++j)
+		{
+			//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
+			tmp[i][j] = ViewTransform * tmp[i][j];	//ç›¸æœºåæ ‡ç³»å˜æ¢æ²¡é—®é¢˜ï¼ï¼ï¼
+													//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
+			tmp[i][j] = ProjectTransform * tmp[i][j];
+			tmp[i][j].identity();
+			//cout << tmp[i][j].a[0] << ' ' << tmp[i][j].a[1] << ' ' << tmp[i][j].a[2] << ' ' << tmp[i][j].a[3] << endl;
+		}
+
+	glColor3b(127, 0, 0);
+	for (int i = 0; i < 12; ++i)
+	{
+		for (int k = index; k < index + 49; ++k)
+		{
+			int j = (i + 1) % 12;
+#if 0
+			cout << '(' << tmp[i][k].a[0] << ',' << tmp[i][k].a[1] << ')' << ' ';
+			cout << '(' << tmp[i][k + 1].a[0] << ',' << tmp[i][k + 1].a[1] << ')' << ' ';
+			cout << '(' << tmp[j][k + 1].a[0] << ',' << tmp[j][k + 1].a[1] << ')' << ' ';
+			cout << '(' << tmp[j][k].a[0] << ',' << tmp[j][k].a[1] << ')' << ' ';
+			cout << endl << endl;
+#endif
+			//çº¹ç†æ˜ å°„
+			glColor3b(127, 127, 127);
+			glBegin(GL_POLYGON);
+			glVertex2f(tmp[i][k].a[0], tmp[i][k].a[1]);
+			glVertex2f(tmp[i][k + 1].a[0], tmp[i][k + 1].a[1]);
+			glVertex2f(tmp[j][k + 1].a[0], tmp[j][k + 1].a[1]);
+			glVertex2f(tmp[j][k].a[0], tmp[j][k].a[1]);
+			glEnd();
+
+			glColor3b(0, 0, 0);
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(tmp[i][k].a[0], tmp[i][k].a[1]);
+			glVertex2f(tmp[i][k + 1].a[0], tmp[i][k + 1].a[1]);
+			glVertex2f(tmp[j][k + 1].a[0], tmp[j][k + 1].a[1]);
+			glVertex2f(tmp[j][k].a[0], tmp[j][k].a[1]);
+			glEnd();
+		}
+
+	}
+	glFlush();
 	//	index++;
 	//}
 }
@@ -693,7 +702,7 @@ void SpecialKeys(int key, int x, int y)
 	myDisplay();
 }
 
-//²»ÓÃÊó±ê 
+//ä¸ç”¨é¼ æ ‡ 
 void OnMouse(int button, int state, int x, int y)
 {
 
@@ -707,7 +716,7 @@ void OnMouse(int button, int state, int x, int y)
 	}
 }
 
-//»¹²»ÖªµÀÔõÃ´±£³Ö±ÈÀı£¬Ã»ÓÃ 
+//è¿˜ä¸çŸ¥é“æ€ä¹ˆä¿æŒæ¯”ä¾‹ï¼Œæ²¡ç”¨ 
 
 void myReshape(int w, int h)
 {
@@ -724,7 +733,7 @@ int main(int argc, char *argv[])
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowPosition(100, 100);
 	glutInitWindowSize(WIDTH, HEIGHT);
-	
+
 	glutCreateWindow("Boost v1.0");
 
 	InitEnvironment();
