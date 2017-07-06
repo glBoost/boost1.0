@@ -1,4 +1,4 @@
-#include <GL/glut.h>
+ï»¿#include <GL/glut.h>
 #include <vector>
 #include <iostream>
 #include <stdio.h>
@@ -9,12 +9,12 @@
 #include <time.h>
 using namespace std;
 
-/*  ÆÁÄ»´óĞ¡  */
+/*  å±å¹•å¤§å°  */
 #define WIDTH 640
 #define HEIGHT 480
 
 #define PI 3.14159265
-#define BMP_Header_Length 54	//24Î»BMPÎÄ¼şÍ·´óĞ¡
+#define BMP_Header_Length 54	//24ä½BMPæ–‡ä»¶å¤´å¤§å°
 bool game_over = false;
 bool game_start = true;
 GLuint tex_id = 0;
@@ -22,38 +22,38 @@ GLuint tex[10];
 GLuint start_pic = 0, over_pic = 0;
 
 /////////////////////////////////////////////
-// ÈıÎ¬ÏòÁ¿Àà £º Ö÷ÒªÓÃÓÚµã±íÊ¾ºÍÏòÁ¿¼ÆËã  //
+// ä¸‰ç»´å‘é‡ç±» ï¼š ä¸»è¦ç”¨äºç‚¹è¡¨ç¤ºå’Œå‘é‡è®¡ç®—  //
 /////////////////////////////////////////////
 struct Vector {
 	float u, v, w;
 	Vector(float _u, float _v, float _w) :u(_u), v(_v), w(_w) {}
 	Vector() :u(0.0), v(0.0), w(0.0) {}
 
-	//ÏòÁ¿µã»ı
+	//å‘é‡ç‚¹ç§¯
 	float operator*(const Vector &d)
 	{
 		return u*d.u + v*d.v + w*d.w;
 	}
 
-	//ÏòÁ¿Êı³Ë
+	//å‘é‡æ•°ä¹˜
 	Vector operator*(float f)
 	{
 		return Vector(u*f, v*f, w*f);
 	}
 
-	//ÏòÁ¿¼õ·¨
+	//å‘é‡å‡æ³•
 	Vector operator-(const Vector &d)
 	{
 		return Vector(u - d.u, v - d.v, w - d.w);
 	}
 
-	//ÏòÁ¿¼Ó·¨
+	//å‘é‡åŠ æ³•
 	Vector operator+(const Vector &d)
 	{
 		return Vector(u + d.u, v + d.v, w + d.w);
 	}
 
-	//ÏòÁ¿²æ³Ë
+	//å‘é‡å‰ä¹˜
 	Vector cross(Vector V) {
 		Vector result;
 		result.u = v*V.w - w*V.v;
@@ -62,13 +62,13 @@ struct Vector {
 		return result;
 	}
 
-	//ÏòÁ¿Ä£³¤
+	//å‘é‡æ¨¡é•¿
 	float length()
 	{
 		return sqrt(u*u + v*v + w*w);
 	}
 
-	//ÏòÁ¿µ¥Î»»¯
+	//å‘é‡å•ä½åŒ–
 	void Normalize()
 	{
 		float l = length();
@@ -80,7 +80,7 @@ struct Vector {
 };
 
 //////////////////////////////////////
-//	ËÄÎ¬ÏòÁ¿Àà£ºÖ÷ÒªÓÃÓÚ×ø±ê±ä»»	//
+//	å››ç»´å‘é‡ç±»ï¼šä¸»è¦ç”¨äºåæ ‡å˜æ¢	//
 //////////////////////////////////////
 struct Vector4D {
 	float a[4];
@@ -94,7 +94,7 @@ struct Vector4D {
 		a[3] = w;
 	}
 
-	//¸ù¾İÈıÎ¬ÏòÁ¿¹¹ÔìËÄÎ¬ÏòÁ¿
+	//æ ¹æ®ä¸‰ç»´å‘é‡æ„é€ å››ç»´å‘é‡
 	Vector4D(Vector v) {
 		a[0] = v.u;
 		a[1] = v.v;
@@ -102,14 +102,14 @@ struct Vector4D {
 		a[3] = 1;
 	}
 
-	//[]ÔËËã·ûÖØ×°
+	//[]è¿ç®—ç¬¦é‡è£…
 	float& operator[](int i) {
 		return a[i];
 	}
 
-	//¹éÒ»»¯£¬×ª»»ÎªÍ¶Ó°ÆÁÄ»×ø±ê
+	//å½’ä¸€åŒ–ï¼Œè½¬æ¢ä¸ºæŠ•å½±å±å¹•åæ ‡
 	void identity() {
-		//z = 0µÄ´¦ÀíºÍz < 0µÄ²Ã¼ô
+		//z = 0çš„å¤„ç†å’Œz < 0çš„è£å‰ª
 		if (a[3] < 1e-6)
 		{
 			a[0] *= 10000;
@@ -125,7 +125,7 @@ struct Vector4D {
 };
 
 //////////////////////////////////////
-//	ËÄÎ¬¾ØÕóÀà£ºÖ÷Òª½øĞĞ×ø±ê±ä»»	//
+//	å››ç»´çŸ©é˜µç±»ï¼šä¸»è¦è¿›è¡Œåæ ‡å˜æ¢	//
 //////////////////////////////////////
 struct Matrix {
 	float a[4][4];
@@ -133,7 +133,7 @@ struct Matrix {
 		memset(a, 0, sizeof(a));
 	}
 
-	//Æ½ÒÆ±ä»»
+	//å¹³ç§»å˜æ¢
 	void ModelT(float x, float y, float z) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = 1;
@@ -145,7 +145,7 @@ struct Matrix {
 		a[2][3] = z;
 	}
 
-	//Èı¸ö·½ÏòµÄĞı×ª±ä»»
+	//ä¸‰ä¸ªæ–¹å‘çš„æ—‹è½¬å˜æ¢
 	void ModelRx(float angle_x) {
 		memset(a, 0, sizeof(a));
 		float s = sin(angle_x * PI / 180);
@@ -180,7 +180,7 @@ struct Matrix {
 		return;
 	}
 
-	//Ëõ·Å±ä»»
+	//ç¼©æ”¾å˜æ¢
 	void ModelS(float fx, float fy, float fz) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = fx;
@@ -189,12 +189,12 @@ struct Matrix {
 		a[3][3] = 1;
 	}
 
-	//ÔËËã·ûÖØÔØ
+	//è¿ç®—ç¬¦é‡è½½
 	float* operator[](int x) {
 		return a[x];
 	}
 
-	//¹Û²ì×ø±êÏµÆ½ÒÆ±ä»»
+	//è§‚å¯Ÿåæ ‡ç³»å¹³ç§»å˜æ¢
 	void ViewT(float x, float y, float z) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = 1;
@@ -206,7 +206,7 @@ struct Matrix {
 		a[2][3] = -z;
 	}
 
-	//ÊÀ½ç×ø±êÏµ×ª»»Îª¹Û²ì×ø±êÏµ
+	//ä¸–ç•Œåæ ‡ç³»è½¬æ¢ä¸ºè§‚å¯Ÿåæ ‡ç³»
 	void ViewR(Vector u, Vector v, Vector n) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = u.u;
@@ -221,7 +221,7 @@ struct Matrix {
 		a[3][3] = 1;
 	}
 
-	//Í¶Ó°±ä»»
+	//æŠ•å½±å˜æ¢
 	void Project(float z_near, float z_far, int width, int height) {
 		memset(a, 0, sizeof(a));
 		a[0][0] = z_near / (width / 2);
@@ -231,7 +231,7 @@ struct Matrix {
 		a[3][2] = 1;
 	}
 
-	//¾ØÕó³Ë·¨
+	//çŸ©é˜µä¹˜æ³•
 	Matrix operator*(Matrix b) {
 		Matrix result;
 		for (int i = 0; i < 4; ++i)
@@ -247,7 +247,7 @@ struct Matrix {
 		return result;
 	}
 
-	//¾ØÕóÊä³ö£¨ÓÃÓÚdebug£©
+	//çŸ©é˜µè¾“å‡ºï¼ˆç”¨äºdebugï¼‰
 	friend ostream& operator<<(ostream& o, const Matrix &m) {
 		for (int i = 0; i < 4; ++i)
 		{
@@ -261,7 +261,8 @@ struct Matrix {
 	}
 };
 
-//¾ØÕóºÍÏòÁ¿µÄ³Ë·¨
+
+//çŸ©é˜µå’Œå‘é‡çš„ä¹˜æ³•
 Vector4D operator*(Matrix m, Vector4D v) {
 	Vector4D result;
 	for (int i = 0; i < 4; ++i)
@@ -277,29 +278,29 @@ Vector4D operator*(Matrix m, Vector4D v) {
 }
 
 //////////////////////////////////
-//	»æÖÆÊ±¾àÀëÅÅĞòËùÓÃµÄÊı¾İ½á¹¹
+//	ç»˜åˆ¶æ—¶è·ç¦»æ’åºæ‰€ç”¨çš„æ•°æ®ç»“æ„
 //////////////////////////////////
 struct Rec
 {
-	float dis;				//¾ØĞÎÖĞĞÄµ½Ïà»úµÄ¾àÀë
-	Vector4D vertices[4];	//¾ØĞÎµÄËÄ¸ö¶¥µã
-	int tex_id;				//¾ØĞÎµÄÎÆÀí
+	float dis;				//çŸ©å½¢ä¸­å¿ƒåˆ°ç›¸æœºçš„è·ç¦»
+	Vector4D vertices[4];	//çŸ©å½¢çš„å››ä¸ªé¡¶ç‚¹
+	int tex_id;				//çŸ©å½¢çš„çº¹ç†
 };
-Rec rec[2000];	//´æ·ÅËùÓĞĞèÒª»­µÄ¾ØĞÎ
+Rec rec[2000];	//å­˜æ”¾æ‰€æœ‰éœ€è¦ç”»çš„çŸ©å½¢
 
-				//´Ó´óµ½Ğ¡ÅÅĞò
+				//ä»å¤§åˆ°å°æ’åº
 int cmpRec(const void* p1, const void* p2)
 {
 	return (*(Rec*)p2).dis > (*(Rec*)p1).dis ? 1 : -1;
 }
 
-//´ÓĞ¡µ½´óÅÅĞò
+//ä»å°åˆ°å¤§æ’åº
 int cmpInt(const void* p1, const void* p2)
 {
 	return (*(int*)p2) < (*(int*)p1) ? 1 : -1;
 }
 ////////////////////////////////////
-//	BÑùÌõĞèÒªµÄÊı¾İ
+//	Bæ ·æ¡éœ€è¦çš„æ•°æ®
 ////////////////////////////////////
 #define X 0
 #define Y 1
@@ -329,29 +330,29 @@ struct Barrier
 }barriers[2000];
 
 ///////////////////////////////
-//	×ø±ê±ä»»ĞèÒªµÄÊı¾İ
+//	åæ ‡å˜æ¢éœ€è¦çš„æ•°æ®
 ////////////////////////////////
-Vector pathway[12][2000];	//12ÌõÀâÏß
-Vector trace[2000];			//ÖĞÖáÏß
-float cameraR;				//Ïà»úËù´¦Ô²ÖùÌåµÄ°ë¾¶
-int angle;					//Ïà»úËù´¦Î»ÖÃÓëÄ¬ÈÏÎ»ÖÃÆ«×ªµÄ½Ç¶È
+Vector pathway[12][2000];	//12æ¡æ£±çº¿
+Vector trace[2000];			//ä¸­è½´çº¿
+float cameraR;				//ç›¸æœºæ‰€å¤„åœ†æŸ±ä½“çš„åŠå¾„
+int angle;					//ç›¸æœºæ‰€å¤„ä½ç½®ä¸é»˜è®¤ä½ç½®åè½¬çš„è§’åº¦
 float angle_a;
 float fangle;
 
-							//////////////////////////////
-							//	Í¼Ïñ»æÖÆĞèÒªµÄÊı¾İ
-							//////////////////////////////
-int index = 0;					//µ±Ç°Î»ÖÃÏà»úµÄ»ù×¼ÏÂ±ê
-float position = 0.0;			//Ïà»úµÄÊµ¼ÊÎ»ÖÃ
-float speed = 0.04;				//Ïà»úÒÆ¶¯µÄËÙ¶È
-float offset = 0.0;				//Î»ÖÃ³¬³ö»ù×¼µÄ²¿·Ö
-float Radio = 0.015;				//Ïà»ú°ë¾¶
-int b_start = 0, b_end = 0, c_end = 0;	//ĞèÒª»­µÄÕÏ°­ÎïµÄ¿ªÊ¼×ø±ê¡¢½áÊø×ø±ê¡¢ĞèÒª»­µÄÂ·µÄÕÏ°­ÎïµÄ½áÊø×ø±ê
-Vector4D tmp[12][2000];			//ÁÙÊ±4Î¬ÏòÁ¿×ö×ø±ê±ä»»
-Barrier b_tmp[30];				//ÁÙÊ±ÕÏ°­×ö×ø±ê±ä»»
+//////////////////////////////
+//	å›¾åƒç»˜åˆ¶éœ€è¦çš„æ•°æ®
+//////////////////////////////
+int index = 0;					//å½“å‰ä½ç½®ç›¸æœºçš„åŸºå‡†ä¸‹æ ‡
+float position = 0.0f;			//ç›¸æœºçš„å®é™…ä½ç½®
+float speed;				//ç›¸æœºç§»åŠ¨çš„é€Ÿåº¦
+float offset = 0.0f;				//ä½ç½®è¶…å‡ºåŸºå‡†çš„éƒ¨åˆ†
+float Radio = 0.015f;				//ç›¸æœºåŠå¾„
+int b_start = 0, b_end = 0, c_end = 0;		//éœ€è¦ç”»çš„éšœç¢ç‰©çš„å¼€å§‹åæ ‡ã€ç»“æŸåæ ‡ã€éœ€è¦ç”»çš„è·¯çš„éšœç¢ç‰©çš„ç»“æŸåæ ‡
+Vector4D tmp[12][2000];			//ä¸´æ—¶4ç»´å‘é‡åšåæ ‡å˜æ¢
+Barrier b_tmp[30];				//ä¸´æ—¶éšœç¢åšåæ ‡å˜æ¢
 
 								////////////////////////////////////
-								//	ËùÓĞµÄ·½·¨
+								//	æ‰€æœ‰çš„æ–¹æ³•
 								////////////////////////////////////
 void make_barriers();
 void Init(void);
@@ -375,18 +376,18 @@ void Update();
 int main(int argc, char *argv[]);
 
 /////////////////////////////////////////
-// BÑùÌõ½¨Ä£
-//	     by ÎÄ¾´¬u
+// Bæ ·æ¡å»ºæ¨¡
+//	     by æ–‡æ•¬ç‘„
 /////////////////////////////////////////
 
-//Ëæ»úÉú³ÉÕÏ°­
+//éšæœºç”Ÿæˆéšœç¢
 void make_barriers() {
 	srand((int)time(0));
 	for (int i = 0; i < (seg_count / 6); i++) {
 		ran[0][i] = random(12);
 		ran[1][i] = random(seg_count - 15) + 15;
 	}
-	//¶ÔÕÏ°­°´indexÅÅĞò
+	//å¯¹éšœç¢æŒ‰indexæ’åº
 	qsort(ran[1], seg_count / 6, sizeof(ran[1][0]), cmpInt);
 }
 
@@ -402,9 +403,9 @@ void Init(void)
 	points[0][Y] = 0.5f;
 	points[0][Z] = 0.5f;
 
-	points[1][X] = -0.5f;
+	points[1][X] = 0.4f;
 	points[1][Y] = 0.5f;
-	points[1][Z] = 0.2f;
+	points[1][Z] = 0.3f;
 
 	points[2][X] = -0.5f;
 	points[2][Y] = -0.5f;
@@ -521,40 +522,29 @@ void DisplayBspine(Vector1 P[], float T[], int n, int k, int seg_seg_count) {
 		t = t + delta;
 		while (t > T[j + 1])
 			j++;
-		Bspline(P, T, k, t, j, V[i]);
+		if (i < seg_count)
+			Bspline(P, T, k, t, j, V[i]);
+		else {
+			V[i][X] = V[0][X];
+			V[i][Y] = V[0][Y];
+			V[i][Z] = V[0][Z];
+		}
 		build_ground(V[i], V[i - 1], i);
 	}
 }
 
-#if 0
-Matrix ModelViewProject, Project, View, Model;
-Matrix ViewR, ViewT, ModelS, ModelR, ModelT;
-
-/*Project£ºÍ¶Ó°±ä»»¾ØÕó
-View£ºÊÓÍ¼±ä»»¾ØÕó
-Model£ºÄ£ĞÍ±ä»»¾ØÕó*/
-ModelViewProject = Project * View * Model;
-
-/*S£ºËõ·Å R£ºĞı×ª T£ºÆ½ÒÆ*/
-ModelViewProject = Project
-* ViewR * ViewT
-* ModelS * ModelR * ModelT;
-
-Vector4D gl_position = ModelViewProject * Vertex;
-#endif
-
-//ÊÓ½Ç±ä»»¾ØÕóµÄ¼ÆËã
+//è§†è§’å˜æ¢çŸ©é˜µçš„è®¡ç®—
 Matrix view_transform(Vector camera, Vector x, Vector y, Vector z) {
 
 	Matrix viewT;
-	viewT.ViewT(camera.u, camera.v, camera.w);	//Ïà»úÆ½ÒÆµ½Ô­µã
+	viewT.ViewT(camera.u, camera.v, camera.w);	//ç›¸æœºå¹³ç§»åˆ°åŸç‚¹
 	Matrix viewR;
-	viewR.ViewR(x, y, z);						//×ø±êÏµ¹éÒ»
+	viewR.ViewR(x, y, z);						//åæ ‡ç³»å½’ä¸€
 	Matrix ViewTransform = viewR * viewT;
 	return ViewTransform;
 }
 
-//Í¶Ó°±ä»»¾ØÕóµÄ¼ÆËã
+//æŠ•å½±å˜æ¢çŸ©é˜µçš„è®¡ç®—
 Matrix project_transform(float z_near, float z_far, int width, int height)
 {
 	Matrix Project;
@@ -562,7 +552,7 @@ Matrix project_transform(float z_near, float z_far, int width, int height)
 	return Project;
 }
 
-//¼ì²éÒ»¸öÕûÊıÊÇ·ñÎª2µÄÕûÊı´Î·½£¬Èç¹ûÊÇ£¬·µ»Ø1£¬·ñÔò·µ»Ø0
+//æ£€æŸ¥ä¸€ä¸ªæ•´æ•°æ˜¯å¦ä¸º2çš„æ•´æ•°æ¬¡æ–¹ï¼Œå¦‚æœæ˜¯ï¼Œè¿”å›1ï¼Œå¦åˆ™è¿”å›0
 int power_of_two(int n)
 {
 	if (n <= 0)
@@ -571,8 +561,8 @@ int power_of_two(int n)
 }
 
 /////////////////////////////////////////////////
-//	¶ÁÈ¡Ò»¸öBMPÎÄ¼ş×÷ÎªÎÆÀí
-//	Èç¹ûÊ§°Ü£¬·µ»Ø0£¬Èç¹û³É¹¦£¬·µ»ØÎÆÀí±àºÅ
+//	è¯»å–ä¸€ä¸ªBMPæ–‡ä»¶ä½œä¸ºçº¹ç†
+//	å¦‚æœå¤±è´¥ï¼Œè¿”å›0ï¼Œå¦‚æœæˆåŠŸï¼Œè¿”å›çº¹ç†ç¼–å·
 //////////////////////////////////////////////////
 GLuint load_texture(const char* file_name)
 {
@@ -580,18 +570,18 @@ GLuint load_texture(const char* file_name)
 	GLubyte* pixels = NULL;
 	GLuint last_texture_ID, texture_ID = 0;
 
-	// ´ò¿ªÎÄ¼ş£¬Èç¹ûÊ§°Ü£¬·µ»Ø
+	// æ‰“å¼€æ–‡ä»¶ï¼Œå¦‚æœå¤±è´¥ï¼Œè¿”å›
 	FILE* pFile = fopen(file_name, "rb");
 	if (pFile == 0)
 		return 0;
 
-	// ¶ÁÈ¡ÎÄ¼şÖĞÍ¼ÏóµÄ¿í¶ÈºÍ¸ß¶È
+	// è¯»å–æ–‡ä»¶ä¸­å›¾è±¡çš„å®½åº¦å’Œé«˜åº¦
 	fseek(pFile, 0x0012, SEEK_SET);
 	fread(&width, 4, 1, pFile);
 	fread(&height, 4, 1, pFile);
 	fseek(pFile, BMP_Header_Length, SEEK_SET);
 
-	// ¼ÆËãÃ¿ĞĞÏñËØËùÕ¼×Ö½ÚÊı£¬²¢¸ù¾İ´ËÊı¾İ¼ÆËã×ÜÏñËØ×Ö½ÚÊı
+	// è®¡ç®—æ¯è¡Œåƒç´ æ‰€å å­—èŠ‚æ•°ï¼Œå¹¶æ ¹æ®æ­¤æ•°æ®è®¡ç®—æ€»åƒç´ å­—èŠ‚æ•°
 	{
 		GLint line_bytes = width * 3;
 		while (line_bytes % 4 != 0)
@@ -599,7 +589,7 @@ GLuint load_texture(const char* file_name)
 		total_bytes = line_bytes * height;
 	}
 
-	// ¸ù¾İ×ÜÏñËØ×Ö½ÚÊı·ÖÅäÄÚ´æ
+	// æ ¹æ®æ€»åƒç´ å­—èŠ‚æ•°åˆ†é…å†…å­˜
 	pixels = (GLubyte*)malloc(total_bytes);
 	if (pixels == 0)
 	{
@@ -607,7 +597,7 @@ GLuint load_texture(const char* file_name)
 		return 0;
 	}
 
-	// ¶ÁÈ¡ÏñËØÊı¾İ
+	// è¯»å–åƒç´ æ•°æ®
 	if (fread(pixels, total_bytes, 1, pFile) <= 0)
 	{
 		free(pixels);
@@ -615,11 +605,11 @@ GLuint load_texture(const char* file_name)
 		return 0;
 	}
 
-	// ÔÚ¾É°æ±¾µÄOpenGLÖĞ
-	// Èç¹ûÍ¼ÏóµÄ¿í¶ÈºÍ¸ß¶È²»ÊÇµÄÕûÊı´Î·½£¬ÔòĞèÒª½øĞĞËõ·Å
-	// ÕâÀï²¢Ã»ÓĞ¼ì²éOpenGL°æ±¾£¬³öÓÚ¶Ô°æ±¾¼æÈİĞÔµÄ¿¼ÂÇ£¬°´¾É°æ±¾´¦Àí
-	// ÁíÍâ£¬ÎŞÂÛÊÇ¾É°æ±¾»¹ÊÇĞÂ°æ±¾£¬
-	// µ±Í¼ÏóµÄ¿í¶ÈºÍ¸ß¶È³¬¹ıµ±Ç°OpenGLÊµÏÖËùÖ§³ÖµÄ×î´óÖµÊ±£¬Ò²Òª½øĞĞËõ·Å
+	// åœ¨æ—§ç‰ˆæœ¬çš„OpenGLä¸­
+	// å¦‚æœå›¾è±¡çš„å®½åº¦å’Œé«˜åº¦ä¸æ˜¯çš„æ•´æ•°æ¬¡æ–¹ï¼Œåˆ™éœ€è¦è¿›è¡Œç¼©æ”¾
+	// è¿™é‡Œå¹¶æ²¡æœ‰æ£€æŸ¥OpenGLç‰ˆæœ¬ï¼Œå‡ºäºå¯¹ç‰ˆæœ¬å…¼å®¹æ€§çš„è€ƒè™‘ï¼ŒæŒ‰æ—§ç‰ˆæœ¬å¤„ç†
+	// å¦å¤–ï¼Œæ— è®ºæ˜¯æ—§ç‰ˆæœ¬è¿˜æ˜¯æ–°ç‰ˆæœ¬ï¼Œ
+	// å½“å›¾è±¡çš„å®½åº¦å’Œé«˜åº¦è¶…è¿‡å½“å‰OpenGLå®ç°æ‰€æ”¯æŒçš„æœ€å¤§å€¼æ—¶ï¼Œä¹Ÿè¦è¿›è¡Œç¼©æ”¾
 	/*
 	{
 	GLint max;
@@ -630,17 +620,15 @@ GLuint load_texture(const char* file_name)
 	|| height > max)
 	{
 	const GLint new_width = 256;
-	const GLint new_height = 256; // ¹æ¶¨Ëõ·ÅºóĞÂµÄ´óĞ¡Îª±ß³¤µÄÕı·½ĞÎ
+	const GLint new_height = 256; // è§„å®šç¼©æ”¾åæ–°çš„å¤§å°ä¸ºè¾¹é•¿çš„æ­£æ–¹å½¢
 	GLint new_line_bytes, new_total_bytes;
 	GLubyte* new_pixels = 0;
-
-	// ¼ÆËãÃ¿ĞĞĞèÒªµÄ×Ö½ÚÊıºÍ×Ü×Ö½ÚÊı
+	// è®¡ç®—æ¯è¡Œéœ€è¦çš„å­—èŠ‚æ•°å’Œæ€»å­—èŠ‚æ•°
 	new_line_bytes = new_width * 3;
 	while (new_line_bytes % 4 != 0)
 	++new_line_bytes;
 	new_total_bytes = new_line_bytes * new_height;
-
-	// ·ÖÅäÄÚ´æ
+	// åˆ†é…å†…å­˜
 	new_pixels = (GLubyte*)malloc(new_total_bytes);
 	if (new_pixels == 0)
 	{
@@ -648,13 +636,11 @@ GLuint load_texture(const char* file_name)
 	fclose(pFile);
 	return 0;
 	}
-
-	// ½øĞĞÏñËØËõ·Å
+	// è¿›è¡Œåƒç´ ç¼©æ”¾
 	gluScaleImage(GL_RGB,
 	width, height, GL_UNSIGNED_BYTE, pixels,
 	new_width, new_height, GL_UNSIGNED_BYTE, new_pixels);
-
-	// ÊÍ·ÅÔ­À´µÄÏñËØÊı¾İ£¬°ÑpixelsÖ¸ÏòĞÂµÄÏñËØÊı¾İ£¬²¢ÖØĞÂÉèÖÃwidthºÍheight
+	// é‡Šæ”¾åŸæ¥çš„åƒç´ æ•°æ®ï¼ŒæŠŠpixelsæŒ‡å‘æ–°çš„åƒç´ æ•°æ®ï¼Œå¹¶é‡æ–°è®¾ç½®widthå’Œheight
 	free(pixels);
 	pixels = new_pixels;
 	width = new_width;
@@ -663,7 +649,7 @@ GLuint load_texture(const char* file_name)
 	}
 	*/
 
-	// ·ÖÅäÒ»¸öĞÂµÄÎÆÀí±àºÅ
+	// åˆ†é…ä¸€ä¸ªæ–°çš„çº¹ç†ç¼–å·
 	glGenTextures(1, &texture_ID);
 	if (texture_ID == 0)
 	{
@@ -672,7 +658,7 @@ GLuint load_texture(const char* file_name)
 		return 0;
 	}
 
-	// °ó¶¨ĞÂµÄÎÆÀí£¬ÔØÈëÎÆÀí²¢ÉèÖÃÎÆÀí²ÎÊı
+	// ç»‘å®šæ–°çš„çº¹ç†ï¼Œè½½å…¥çº¹ç†å¹¶è®¾ç½®çº¹ç†å‚æ•°
 	glBindTexture(GL_TEXTURE_2D, texture_ID);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -688,17 +674,26 @@ GLuint load_texture(const char* file_name)
 
 bool hit_barrier(int s, int e)
 {
-	for (int i = s; i < e; i++)
+	//return false;
+	if (s <= e)
 	{
-		if (barriers[i].b_index == index)
+		for (int i = s; i < e; i++)
 		{
-			if (barriers[i].b_line == ((angle + 260) % 360) / 30)
-				return true;
-			if (barriers[i].b_line == ((angle + 280) % 360) / 30)
-				return true;
+			if (barriers[i].b_index == index)
+			{
+				if (barriers[i].b_line == ((angle + 260) % 360) / 30)
+					return true;
+				if (barriers[i].b_line == ((angle + 280) % 360) / 30)
+					return true;
+			}
+			if (barriers[i].b_index > index)
+				return false;
 		}
-		if (barriers[i].b_index > index)
-			return false;
+		return false;
+	}
+	else
+	{
+		return hit_barrier(0, s) || hit_barrier(e, (seg_count / 6));
 	}
 }
 
@@ -729,101 +724,166 @@ void GameEnd() {
 }
 
 void Game() {
-	//ÇåÆÁ
+	//æ¸…å±
 	glClear(GL_COLOR_BUFFER_BIT);
 	glBindTexture(GL_TEXTURE_2D, tex_id);
 
-	//ÏòÁ¿³õÊ¼»¯
+	//å‘é‡åˆå§‹åŒ–
 	for (int i = 0; i < 12; ++i)
-		for (int j = index; j < index + 40; ++j)
+		for (int j = index; j < (index + 40); ++j)
 		{
-			tmp[i][j] = Vector4D(pathway[i][j]);
+			int n_j = j%seg_count;
+			tmp[i][n_j] = Vector4D(pathway[i][n_j]);
 		}
 
-	//¼ÆËãÏà»úÎ»ÖÃ¼°Ïà»ú×ø±êÏµµÄ×ø±êÖá
-	Vector y0 = pathway[0][index] - trace[index];	//·¨Ïò¡¢Ğı×ª×ø±êÏµµÄyÖá
-	Vector z = trace[index + 1] - trace[index];		//Ïà»ú·½Ïò	
+	//è®¡ç®—ç›¸æœºä½ç½®åŠç›¸æœºåæ ‡ç³»çš„åæ ‡è½´
+	Vector y0 = pathway[0][index] - trace[index];	//æ³•å‘ã€æ—‹è½¬åæ ‡ç³»çš„yè½´
+	Vector z = trace[index + 1] - trace[index];		//ç›¸æœºæ–¹å‘	
 	y0.Normalize();
-	Vector x0 = y0.cross(z);						//Ğı×ª×ø±êÏµµÄx×ø±êÖá
+	Vector x0 = y0.cross(z);						//æ—‹è½¬åæ ‡ç³»çš„xåæ ‡è½´
 	x0.Normalize();
-	Vector y = x0 * cos(angle*PI / 180) + y0 *sin(angle*PI / 180);	//ÕæÊµÏà»úÎ»ÖÃÓëÖĞÖáÁ¬ÏßËùÔÚµÄ·½Ïò
+	Vector y = x0 * cos(angle*PI / 180) + y0 *sin(angle*PI / 180);	//çœŸå®ç›¸æœºä½ç½®ä¸ä¸­è½´è¿çº¿æ‰€åœ¨çš„æ–¹å‘
 	y.Normalize();
-	Vector camera = y * Radio + trace[index];			//Ïà»úÎ»ÖÃ = ÖĞÖáÎ»ÖÃ + °ë¾¶
-	camera = camera + z * offset;						//					  + Æ«ÒÆ
+	Vector camera = y * Radio + trace[index];			//ç›¸æœºä½ç½® = ä¸­è½´ä½ç½® + åŠå¾„
+	camera = camera + z * offset;						//					  + åç§»
 	z.Normalize();
-	Vector x = y.cross(z);							//Ïà»ú×ø±êÏµµÄxÖá
+	Vector x = y.cross(z);							//ç›¸æœºåæ ‡ç³»çš„xè½´
 	x.Normalize();
-	y = y * -1;										//Ïà»ú×ø±êÏµµÄyÖá
+	y = y * -1;										//ç›¸æœºåæ ‡ç³»çš„yè½´
 
 													/*cout << "camera: " << camera.u << ' ' << camera.v << ' ' << camera.w << endl;
 													cout << "x: " << x.u << ' ' << x.v << ' ' << x.w << endl;
 													cout << "y: " << y.u << ' ' << y.v << ' ' << y.w << endl;
 													cout << "z: " << z.u << ' ' << z.v << ' ' << z.w << endl;*/
 
-													//¼ÆËã±ä»»¾ØÕó
-	Matrix ViewTransform = view_transform(camera, x, y, z);		//Ïà»ú×ø±êÏµ±ä»»¾ØÕó
-	Matrix ProjectTransform = project_transform(100, 500, WIDTH, HEIGHT);	//Í¶Ó°±ä»»¾ØÕó
-
-																			/*cout << ViewTransform << ProjectTransform;*/
-
-																			//ÕÒµ½ĞèÒª»­µÄÕÏ°­Îï
-	while (barriers[b_start].b_index < index)
+													//è®¡ç®—å˜æ¢çŸ©é˜µ
+	Matrix ViewTransform = view_transform(camera, x, y, z);		//ç›¸æœºåæ ‡ç³»å˜æ¢çŸ©é˜µ
+	Matrix ProjectTransform = project_transform(100, 500, WIDTH, HEIGHT);	//æŠ•å½±å˜æ¢çŸ©é˜µ
+																		
+	int tmp_end = index;
+	while (barriers[b_start].b_index < tmp_end)
+	{
 		b_start++;
-	while (barriers[b_end].b_index <= index + 39)
+		if (barriers[b_start].b_index >= seg_count || b_start >= (seg_count / 6))
+		{
+			b_start = 0;
+			tmp_end -= seg_count;
+		}
+	}
+	tmp_end = index + 39;
+	while (barriers[b_end].b_index <= tmp_end)
+	{
 		b_end++;
-	while (barriers[c_end].b_index <= index + 59)
+		if (barriers[b_end].b_index >= seg_count || b_end >= (seg_count / 6))
+		{
+			b_end = 0;
+			tmp_end -= seg_count;
+		}
+	}
+	tmp_end = index + 59;
+	while (barriers[c_end].b_index <= tmp_end)
+	{
 		c_end++;
+		if (barriers[c_end].b_index >= seg_count || c_end >= (seg_count / 6))
+		{
+			c_end = 0;
+			tmp_end -= seg_count;
+		}
+	}
 
 	if (hit_barrier(b_start, b_end))
 		game_over = true;
 
-	//ÏÈ×ö¹Ü±ÚµãµÄÏà»ú×ø±êÏµµÄ×ª»»
+	//å…ˆåšç®¡å£ç‚¹çš„ç›¸æœºåæ ‡ç³»çš„è½¬æ¢
 	for (int i = 0; i < 12; ++i)
-		for (int j = index; j < index + 40; ++j)
-			tmp[i][j] = ViewTransform * tmp[i][j];
-	//¿É¼ûÕÏ°­Îï¶¥µãµÄÏà»ú×ø±êÏµµÄ×ª»»
-	for (int i = b_start; i < b_end; ++i)
+		for (int j = index; j < (index + 40); ++j) {
+			int n_j = j%seg_count;
+			tmp[i][n_j] = ViewTransform * tmp[i][n_j];
+		}
+	//å¯è§éšœç¢ç‰©é¡¶ç‚¹çš„ç›¸æœºåæ ‡ç³»çš„è½¬æ¢
+	int tmp_cnt = 0;
+	if (b_end >= b_start)
 	{
-		b_tmp[i - b_start].b_line = barriers[i].b_line;
-		b_tmp[i - b_start].b_index = barriers[i].b_index;
-		for (int j = 0; j < 8; ++j)
-			b_tmp[i - b_start].vertices[j] = ViewTransform * barriers[i].vertices[j];
+		for (int i = b_start; i < b_end; ++i)
+		{
+			b_tmp[i - b_start].b_line = barriers[i].b_line;
+			b_tmp[i - b_start].b_index = barriers[i].b_index;
+			for (int j = 0; j < 8; ++j)
+				b_tmp[i - b_start].vertices[j] = ViewTransform * barriers[i].vertices[j];
+		}
+		tmp_cnt = b_end - b_start;
+	}
+	else
+	{
+		for (int i = b_start; i < (seg_count / 6); ++i)
+		{
+			b_tmp[i - b_start].b_line = barriers[i].b_line;
+			b_tmp[i - b_start].b_index = barriers[i].b_index;
+			for (int j = 0; j < 8; ++j)
+				b_tmp[i - b_start].vertices[j] = ViewTransform * barriers[i].vertices[j];
+			tmp_cnt++;
+		}
+		for (int i = 0; i < b_end; ++i)
+		{
+			b_tmp[i + tmp_cnt].b_line = barriers[i].b_line;
+			b_tmp[i + tmp_cnt].b_index = barriers[i].b_index;
+			for (int j = 0; j < 8; ++j)
+				b_tmp[i + tmp_cnt].vertices[j] = ViewTransform * barriers[i].vertices[j];
+		}
+		tmp_cnt += b_end;
 	}
 
+
 	int r_num = 0;
-	//»­¼ÒËã·¨£º¸ù¾İ¾àÀëµÄÔ¶½ü°Ñ¾ØĞÎÅÅĞò
+	//ç”»å®¶ç®—æ³•ï¼šæ ¹æ®è·ç¦»çš„è¿œè¿‘æŠŠçŸ©å½¢æ’åº
 	for (int i = 0; i < 12; ++i)
-		for (int j = index; j < index + 39; ++j)
+		for (int j = index; j < (index + 39); ++j)	//mark
 		{
-			//¼ÆËã¹Ü±ÚÊÇ·ñÍ¿²ÊÉ«
+			//è®¡ç®—ç®¡å£æ˜¯å¦æ¶‚å½©è‰²
+			int n_j = j%seg_count;
 			bool is_color = false;
-			for (int k = b_start; k < c_end; ++k)
-				if (i == barriers[k].b_line)
-					if (j<barriers[k].b_index && (j + 21)>barriers[k].b_index)
-						is_color = true;
+			if (c_end > b_start)
+			{
+				for (int k = b_start; k < c_end; ++k)
+					if (i == barriers[k].b_line)
+						if (n_j<barriers[k].b_index && (n_j + 21)>barriers[k].b_index)
+							is_color = true;
+			}
+			else
+			{
+				for (int k = b_start; k < seg_count / 6; ++k)
+					if (i == barriers[k].b_line)
+						if (n_j<barriers[k].b_index && (n_j + 21)>barriers[k].b_index)
+							is_color = true;
+				for (int k = 0; k < c_end; ++k)
+					if (i == barriers[k].b_line)
+						if ((n_j<barriers[k].b_index && (n_j + 21)>barriers[k].b_index) || (n_j - seg_count<barriers[k].b_index && (n_j - seg_count + 21)>barriers[k].b_index))
+							is_color = true;
+			}
+
 
 			if (is_color)
 				rec[r_num].tex_id = 1 + i / 2;
 			else
 			{
-				if (j < 500)
+				if (n_j < 500)
 					rec[r_num].tex_id = 0;
-				else if (j < 600)
+				else if (n_j < 600)
 					rec[r_num].tex_id = 7;
 				else
 					rec[r_num].tex_id = 8;
 			}
-				
 
-			rec[r_num].vertices[0] = tmp[i][j];
-			rec[r_num].vertices[1] = tmp[i][j + 1];
-			rec[r_num].vertices[2] = tmp[(i + 1) % 12][j + 1];
-			rec[r_num].vertices[3] = tmp[(i + 1) % 12][j];
-			Vector4D* p1 = &tmp[i][j];
-			Vector4D* p2 = &tmp[(i + 1) % 12][j + 1];
+
+			rec[r_num].vertices[0] = tmp[i][n_j];
+			rec[r_num].vertices[1] = tmp[i][n_j + 1];
+			rec[r_num].vertices[2] = tmp[(i + 1) % 12][n_j + 1];
+			rec[r_num].vertices[3] = tmp[(i + 1) % 12][n_j];
+			Vector4D* p1 = &tmp[i][n_j];
+			Vector4D* p2 = &tmp[(i + 1) % 12][n_j + 1];
 			rec[r_num++].dis = (p1->a[0] + p2->a[0])*(p1->a[0] + p2->a[0]) + (p1->a[1] + p2->a[1])*(p1->a[1] + p2->a[1]) + (p1->a[2] + p2->a[2])*(p1->a[2] + p2->a[2]);
 		}
-	for (int i = 0; i < b_end - b_start; ++i)
+	for (int i = 0; i < tmp_cnt; ++i)	//mark
 	{
 		int line_no = b_tmp[i].b_line;
 		for (int j = 0; j < 3; ++j)
@@ -848,7 +908,7 @@ void Game() {
 	}
 	qsort(rec, r_num, sizeof(rec[0]), cmpRec);
 
-	//¹Ü±ÚµãÓëÕÏ°­Îï¶¥µãÍ¶Ó°±ä»»µ½ÆÁÄ»
+	//ç®¡å£ç‚¹ä¸éšœç¢ç‰©é¡¶ç‚¹æŠ•å½±å˜æ¢åˆ°å±å¹•
 	for (int r = 0; r < r_num; ++r)
 		for (int i = 0; i < 4; ++i)
 		{
@@ -858,10 +918,10 @@ void Game() {
 
 	glColor3b(127, 0, 0);
 
-	//»æÖÆ
+	//ç»˜åˆ¶
 	for (int r = 0; r < r_num; ++r)
 	{
-		//ÎÆÀíÓ³Éä
+		//çº¹ç†æ˜ å°„
 		glBindTexture(GL_TEXTURE_2D, tex[rec[r].tex_id]);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 0.0f); glVertex2f(rec[r].vertices[0].a[0], rec[r].vertices[0].a[1]);
@@ -876,14 +936,14 @@ void Game() {
 
 void GameInit() {
 	position = 0;
-	speed = 0.04;
+	speed = 0.03;
 	b_start = b_end = c_end = 0;
 	angle = 0;
 	fangle = 0;
 	angle_a = 0;
-	make_barriers();													//ÖÆ×÷ÕÏ°­
+	make_barriers();													//ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½
 
-																		//ÀûÓÃbÑùÌõÇúÏß³õÊ¼»¯¹ÜµÀÊı¾İ
+																		//ï¿½ï¿½ï¿½ï¿½bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½Ê¼ï¿½ï¿½ï¿½Üµï¿½ï¿½ï¿½ï¿½ï¿½
 	for (int j = 0; j < seg_count; ++j)
 	{
 		for (int i = 0; i < 12; ++i) {
@@ -894,7 +954,7 @@ void GameInit() {
 		//trace[j] = Vector(0, j, 0);
 	}
 
-	//×ª»»ÕÏ°­Îï¶¥µã
+	//è½¬æ¢éšœç¢ç‰©é¡¶ç‚¹
 	for (int u = 0; u < (seg_count / 6); u++) {
 		barriers[u].b_line = ran[0][u];
 		barriers[u].b_index = ran[1][u];
@@ -928,10 +988,11 @@ void InitEnvironment()
 {
 	glClearColor(0, 0, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	glEnable(GL_TEXTURE_2D);											//¿ªÆôÎÆÀí
+	glEnable(GL_TEXTURE_2D);											//å¼€å¯çº¹ç†
 
-																		//¶ÁÈ¡ÎÆÀí
+																		//è¯»å–çº¹ç†
 	tex[0] = load_texture("wenli2.bmp");
+	tex[0] = load_texture("wenli1.bmp");
 	tex[1] = load_texture("wenli2_1.bmp");
 	tex[2] = load_texture("wenli2_2.bmp");
 	tex[3] = load_texture("wenli2_3.bmp");
@@ -939,7 +1000,7 @@ void InitEnvironment()
 	tex[5] = load_texture("wenli2_5.bmp");
 	tex[6] = load_texture("wenli2_6.bmp");
 	tex[7] = load_texture("wenli3.bmp");
-	tex[8] = load_texture("wenli1.bmp");
+	tex[8] = load_texture("wenli2.bmp");
 	start_pic = load_texture("start.bmp");
 	over_pic = load_texture("over.bmp");
 	//cout << tex_id << ' ' << start_pic << ' ' << over_pic << endl;
@@ -947,13 +1008,13 @@ void InitEnvironment()
 	game_over = true;
 
 	glLineWidth(2);
-	angle = 0;															//³õÊ¼»¯µÄ½Ç¶È
-	DisplayBspine(points, tt, N, K, seg_count);							//bÑùÌõĞÎ³É¹ÜµÀ
+	angle = 0;															//åˆå§‹åŒ–çš„è§’åº¦
+	DisplayBspine(points, tt, N, K, seg_count);							//bæ ·æ¡å½¢æˆç®¡é“
 	GameInit();
 	return;
 }
 
-//¼üÅÌÊÂ¼ş
+//é”®ç›˜äº‹ä»¶
 void SpecialKeys(int key, int x, int y)
 {
 	if (key == GLUT_KEY_LEFT)
@@ -968,10 +1029,10 @@ void SpecialKeys(int key, int x, int y)
 	myDisplay();
 }
 
-//Êó±ê 
+//é¼ æ ‡
 void OnMouse(int button, int state, int x, int y)
 {
-	if (button == GLUT_LEFT_BUTTON&&state == GLUT_DOWN)	 	//
+	if (button == GLUT_LEFT_BUTTON&&state == GLUT_DOWN)	 	
 	{
 		if (game_start)
 		{
@@ -1006,7 +1067,7 @@ void OnMouse(int button, int state, int x, int y)
 		}
 		return;
 	}
-	if (button == GLUT_RIGHT_BUTTON&&state == GLUT_DOWN)	//
+	if (button == GLUT_RIGHT_BUTTON&&state == GLUT_DOWN)	
 	{
 		return;
 	}
@@ -1019,21 +1080,19 @@ void OnMouse(int button, int state, int x, int y)
 	}
 }
 
-//Ë¢ĞÂº¯Êı
+//åˆ·æ–°å‡½æ•°
 void Update()
 {
 	if (game_start)
 		GameScreen();
-	else if (position < 1500 && !game_over)
+	else if (!game_over)
 	{
-		/*if (position < 500)
-			tex_id = tex1;
-		else if (position < 600)
-			tex_id = tex3;
-		else
-			tex_id = tex2;*/
-		tex_id = tex[0];
 		position += speed;
+		if (position > seg_count)
+		{
+			position = position - seg_count;
+			speed += 0.02;
+		}
 		fangle += angle_a;
 		if (fangle >= 360)
 			fangle -= 360;
@@ -1062,11 +1121,11 @@ int main(int argc, char *argv[])
 
 	InitEnvironment();
 
-	glutIdleFunc(&Update);				//CPUÏĞÊ±¸üĞÂ
-	glutMouseFunc(&OnMouse);			//Êó±êº¯Êı
-	glutDisplayFunc(&myDisplay);		//ÏÔÊ¾º¯Êı
-	//glutReshapeFunc(&myReshape);		//´°¿Ú¸Ä±äº¯Êı
-	glutSpecialFunc(SpecialKeys);		//¼üÅÌº¯Êı
+	glutIdleFunc(&Update);				//CPUé—²æ—¶æ›´æ–°
+	glutMouseFunc(&OnMouse);			//é¼ æ ‡å‡½æ•°
+	glutDisplayFunc(&myDisplay);		//æ˜¾ç¤ºå‡½æ•°
+	//glutReshapeFunc(&myReshape);		//çª—å£æ”¹å˜å‡½æ•°
+	glutSpecialFunc(SpecialKeys);		//é”®ç›˜å‡½æ•°
 	glutMainLoop();
 
 	return 0;
